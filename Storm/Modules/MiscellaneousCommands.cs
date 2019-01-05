@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Net;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Discord.WebSocket;
 using Storm.Core;
@@ -55,9 +56,8 @@ namespace Storm.Modules
 
             string firstName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(data.results[0].name.first.ToString());
             string lastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(data.results[0].name.last.ToString());
-            string age = data.results[0].dob.age.ToString();
             string phoneNumber = data.results[0].cell.ToString();
-            string avatarURL = data.results[0].picture.large.ToString();
+            string avatarUrl = data.results[0].picture.large.ToString();
             string street = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(data.results[0].location.street.ToString());
             string city = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(data.results[0].location.city.ToString());
             string state = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(data.results[0].location.state.ToString());
@@ -69,11 +69,50 @@ namespace Storm.Modules
             eb.AddField($"Address", $"{street}, {city}, {state}");
             eb.AddField($"Phone Number", phoneNumber);
             eb.WithFooter($"Random person generated from randomuser.me");
-            eb.WithThumbnailUrl(avatarURL);
+            eb.WithThumbnailUrl(avatarUrl);
             eb.WithCurrentTimestamp();
             eb.WithColor(Global.GetRandomColor());
 
             await Context.Channel.SendMessageAsync("", false, eb.Build());
+        }
+
+        [Command("weather")]
+        [Summary("View weather information for a specified area.")]
+        public async Task GetWeatherAsync(string city, string country)
+        {
+            string location = $"{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(city)},{country.ToLower()}";
+            string json = "";
+            using (WebClient client = new WebClient())
+            {
+                json = client.DownloadString($"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={Config.bot.weatherApiKey}");
+            }
+
+            var data = JsonConvert.DeserializeObject<dynamic>(json);
+            File.WriteAllText("Resources/debugData.json", json);
+
+            string cityName = data[0].name.ToString();
+            string countryTag = data.sys[0].country.ToString();
+            string cityId = data.id[0].ToString();
+            string weather = data.weather[0].main.ToString();
+            string temp = data.main[0].temp.ToString();
+            string tempMax = data.main[0].temp_max.ToString();
+            string tempMin = data.main[0].temp_min.ToString();
+            string humidity = data.main[0].humidity.ToString();
+            string wind = data.wind[0].speed.ToString();
+            string icon = data.weather[0].icon.ToString();
+
+            var footer = new EmbedFooterBuilder()
+                .WithIconUrl(Context.User.GetAvatarUrl() ?? Context.User.GetDefaultAvatarUrl())
+                .WithText($"Requested by {Context.User.Username}#{Context.User.Discriminator} | City ID: {cityId}");
+            var nl = Environment.NewLine;
+            var eb = new EmbedBuilder()
+                .WithTitle($"Weather Information for {cityName}, {countryTag}")
+                .WithDescription(
+                    $"**Current Temperature:** `{temp}`{nl}**Weather:** `{weather}`{nl}**Min-Max Temperature:** `{tempMin}-{tempMax}`{nl}**Wind Speed:** `{wind}`{nl}**Humidity:** `{humidity}`")
+                .WithFooter(footer)
+                .WithColor(Global.GetRandomColor())
+                .WithThumbnailUrl($"http://openweathermap.org/img/w/{icon}.png");
+            await ReplyAsync(embed:eb.Build());
         }
 
         //[Command("pass")]

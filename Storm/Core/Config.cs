@@ -36,6 +36,7 @@ namespace Storm.Core
         public string checkEmote;
         public string crossEmote;
         public string coinEmote;
+        public string weatherApiKey;
         public ulong botOwnerId;
     }
 }
