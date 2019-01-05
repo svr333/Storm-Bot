@@ -236,5 +236,11 @@ namespace Storm.Modules
             await Context.User.SendMessageAsync($"**Click this link to invite me to your server!** https://discordapp.com/api/oauth2/authorize?client_id=526748173327138825&scope=bot&permissions=8");
             await Context.Channel.SendMessageAsync($"**{Context.User.Username}, the invite link has been sent to you via Direct Messages. :mailbox:**");
         }
+
+        [Command("ping")]
+        public async Task PingAsync()
+        {
+            await ReplyAsync($":ping_pong: Pong! **{Global.Client.Latency}ms.**");
+        }
     }
 }

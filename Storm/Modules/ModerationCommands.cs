@@ -182,18 +182,5 @@ namespace Storm.Modules
                 await Context.Channel.SendMessageAsync("", false, eb.Build());
             }
         }
-
-        [Command("ping")]
-        public async Task PingAsync()
-        {
-            if (Context.User.Id != Config.bot.botOwnerId)
-            {
-                await ReplyAsync($"{Config.bot.crossEmote} You must be the bot owner to execute this command!");
-            }
-            else
-            {
-                await ReplyAsync($":ping_pong: Pong! **{Global.Client.Latency}ms.**");
-            }
-        }
     }
 }
