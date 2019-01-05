@@ -75,6 +75,7 @@ namespace Storm.Resources
         public const uint DailyCoinsGain = 250;
         public const int MessageRewardCooldown = 10;
         public const int MessageRewardMinLength = 5;
+        public const int XpPerMessageGain = 10;
         public static readonly Tuple<int, int> MessageRewardMinMax = Tuple.Create(5, 10);
 
         //Exception Messages

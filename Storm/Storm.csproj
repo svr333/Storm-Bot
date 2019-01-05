@@ -151,6 +151,7 @@
     <Compile Include="Core\Utilities.cs" />
     <Compile Include="Handlers\CommandHandler.cs" />
     <Compile Include="Handlers\EventHandler.cs" />
+    <Compile Include="Handlers\MessageRewardHandler.cs" />
     <Compile Include="Helpers\Economy\Daily.cs" />
     <Compile Include="Helpers\Economy\ICoinsTransfer.cs" />
     <Compile Include="Helpers\Economy\IDailyCoins.cs" />
