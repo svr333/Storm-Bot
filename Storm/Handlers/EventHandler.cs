@@ -22,7 +22,7 @@ namespace Storm.Handlers
             _client.ReactionAdded += ReactionAdded;
         }
 
-        private async Task ReactionAdded(Cacheable<IUserMessage, ulong> cacheMessage, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionAdded(Cacheable<IUserMessage, ulong> cacheMessage, ISocketMessageChannel channel, SocketReaction reaction)
         {
             var helpMessage = Global.HelpMessagesToTrack.FirstOrDefault();
             if (reaction.MessageId == helpMessage.MessageId)
