@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
+using EventHandler = Storm.Handlers.EventHandler;
 
 namespace Storm.Core
 {
@@ -48,6 +49,7 @@ namespace Storm.Core
                 .AddSingleton(_client)
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandler>()
+                .AddSingleton<EventHandler>()
                 .BuildServiceProvider();
         }
     }
