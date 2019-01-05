@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Discord;
 using Discord.WebSocket;
-using Storm.Helpers;
 using Storm.Resources;
 
 namespace Storm.Core
@@ -16,8 +16,6 @@ namespace Storm.Core
 
         internal static Random Rnd { get; set; } = new Random();
 
-        internal static List<HelpMessage> HelpMessagesToTrack { get; set; } = new List<HelpMessage>();
-
         internal static void WriteColoredLine(string text, ConsoleColor color, ConsoleColor backgroundColor = ConsoleColor.Black)
         {
             Console.BackgroundColor = backgroundColor;
@@ -26,9 +24,9 @@ namespace Storm.Core
             Console.ResetColor();
         }
 
-        internal static string GetRandomSansQuote()
+        internal static Color GetRandomColor()
         {
-            return Lists.SansQuote[Rnd.Next(0, Lists.SansQuote.Count)];
+            return Lists.Colors[Rnd.Next(0, Lists.Colors.Count)];
         }
     }
 }

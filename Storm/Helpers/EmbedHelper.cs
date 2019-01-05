@@ -12,15 +12,14 @@ namespace Storm.Helpers
     {
         public static Embed CreateEmbed(CommandInfo commandInfo)
         {
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
             var nl = Environment.NewLine;
             var embed = new EmbedBuilder()
                 .WithTitle($"{Config.bot.crossEmote}   Incorrect Usage")
                 .WithDescription($"**Name:** {CultureInfo.CurrentCulture.TextInfo.ToTitleCase(commandInfo.Name.ToLower())}{nl}" +
                 $"**Summary:** {commandInfo.Summary}{nl}" +
-                $"**Usage:** {Config.bot.cmdPrefix}{commandInfo.Name} {String.Join(" ", commandInfo.Parameters)}{nl}" +
-                $"**Aliases:** `{String.Join(", ", commandInfo.Aliases)}`")
-                .WithColor(Lists.colorsArray[RandomizeColor])
+                $"**Usage:** {Config.bot.cmdPrefix}{commandInfo.Name} {string.Join(" ", commandInfo.Parameters)}{nl}" +
+                $"**Aliases:** `{string.Join(", ", commandInfo.Aliases)}`")
+                .WithColor(Global.GetRandomColor())
                 .WithCurrentTimestamp();
             return embed.Build();
         }
@@ -35,9 +34,9 @@ namespace Storm.Helpers
             foreach (var parameter in parameters)
             {
                 if (parameter.IsOptional)
-                    parametersFormatted.Add(String.Format(optionalTemplate, parameter.Name));
+                    parametersFormatted.Add(string.Format(optionalTemplate, parameter.Name));
                 else
-                    parametersFormatted.Add(String.Format(mandatoryTemplate, parameter.Name));
+                    parametersFormatted.Add(string.Format(mandatoryTemplate, parameter.Name));
             }
 
             return parametersFormatted;

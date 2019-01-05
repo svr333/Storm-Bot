@@ -2,6 +2,7 @@
 using Discord;
 using System.Threading.Tasks;
 using System;
+using Storm.Core;
 using Storm.Resources;
 
 namespace Storm.Modules
@@ -63,11 +64,10 @@ namespace Storm.Modules
         {
             Random rnd = new Random(DateTime.Now.Millisecond);
             float result = rnd.Next(num1, (num2 + 1));
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
             var eb = new EmbedBuilder();
             eb.AddField(":package: Parameters:", $"Random number between {num1} and {num2}.");
             eb.AddField("<:DawnCheck:512261208875991041> Result", result);
-            eb.WithColor(Lists.colorsArray[RandomizeColor]);
+            eb.WithColor(Global.GetRandomColor());
             await ReplyAsync("", false, eb.Build());
 
         }

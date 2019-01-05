@@ -19,11 +19,10 @@ namespace Storm.Modules
         {
             var account = UserAccounts.GetAccount(Context.User);
             var nl = Environment.NewLine;
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
             var eb = new EmbedBuilder();
             eb.WithTitle($"{Context.User.Username}#{Context.User.Discriminator}'s Profile");
             eb.WithDescription($":gem: **Level:** {account.LevelNumber}{nl}{nl}:flower_playing_cards: **XP:** {account.XP}{nl}{nl}<:DawnCoin:526673931797790720> **Coins:** {account.Coins}");
-            eb.WithColor(Lists.colorsArray[RandomizeColor]);
+            eb.WithColor(Global.GetRandomColor());
             await Context.Channel.SendMessageAsync("", false, eb.Build());
         }
 
@@ -33,11 +32,10 @@ namespace Storm.Modules
         {
             var account = UserAccounts.GetAccount(user);
             var nl = Environment.NewLine;
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
             var eb = new EmbedBuilder();
             eb.WithTitle($"{user.Username}#{user.Discriminator}'s Profile");
             eb.WithDescription($":gem: **Level:** {account.LevelNumber}{nl}{nl}:flower_playing_cards: **XP:** {account.XP}{nl}{nl}<:DawnCoin:526673931797790720> **Coins:** {account.Coins}");
-            eb.WithColor(Lists.colorsArray[RandomizeColor]);
+            eb.WithColor(Global.GetRandomColor());
             await Context.Channel.SendMessageAsync("", false, eb.Build());
         }
 

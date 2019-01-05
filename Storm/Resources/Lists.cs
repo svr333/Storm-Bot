@@ -43,23 +43,22 @@ namespace Storm.Resources
             "Skittles are infinitely better than M&Ms.",
         }.AsReadOnly();
 
-        public static Color[] colorsArray = new Color[]
+        public static readonly IList<Color> Colors = new List<Color>
         {
-                Color.Blue,
-                Color.Gold,
-                Color.Green,
-                Color.Magenta,
-                Color.Orange,
-                Color.Purple,
-                Color.Red,
-                Color.Teal
-        };
+            Color.Blue,
+            Color.Gold,
+            Color.Green,
+            Color.Magenta,
+            Color.Orange,
+            Color.Purple,
+            Color.Red,
+            Color.Teal
+        }.AsReadOnly();
 
         public static readonly IList<string> BotStatus = new List<string>
         {
             $"Made by Tempest#0003 | {Config.bot.cmdPrefix}help",
             $"https://github.com/tomwmth | {Config.bot.cmdPrefix}help",
-            $"Running in {Global.Client.Guilds.Count} guilds! | {Config.bot.cmdPrefix}help",
             $"https://discord.gg/G2m33CV | {Config.bot.cmdPrefix}help"
         }.AsReadOnly();
 

@@ -60,15 +60,14 @@ namespace Storm.Modules
 
             var eb = new EmbedBuilder();
             var nl = Environment.NewLine;
-            var randomizeColor = new Random().Next(Lists.colorsArray.Length);
             eb.WithDescription($"**{user.Username}** has been warned.{nl}**Reason:** {reason}{nl}**Warning Number** {userAccount.NumberOfWarnings}{nl}**Moderator:** {Context.User.Username}");
-            eb.WithColor(Lists.colorsArray[randomizeColor]);
+            eb.WithColor(Global.GetRandomColor());
             await ReplyAsync("", false, eb.Build());
 
             await user.GetOrCreateDMChannelAsync();
             var eb2 = new EmbedBuilder();
             eb2.WithDescription($"You have been warned in *{Context.Guild.Name}*.{nl}**Reason:** {reason}{nl}**Warning Number** {userAccount.NumberOfWarnings}{nl}**Moderator:** {Context.User.Username}");
-            eb2.WithColor(Lists.colorsArray[randomizeColor]);
+            eb2.WithColor(Global.GetRandomColor());
             await user.SendMessageAsync("", false, eb2.Build());
         }
 
@@ -79,9 +78,8 @@ namespace Storm.Modules
         {
             var userAccount = UserAccounts.GetAccount((SocketUser)user);
             var eb = new EmbedBuilder();
-            var randomizeColor = new Random().Next(Lists.colorsArray.Length);
             eb.WithDescription($"**{user.Username}** has {userAccount.NumberOfWarnings} warnings.");
-            eb.WithColor(Lists.colorsArray[randomizeColor]);
+            eb.WithColor(Global.GetRandomColor());
             await ReplyAsync("", false, eb.Build());
         }
 
@@ -143,7 +141,6 @@ namespace Storm.Modules
         public async Task ServerInfo()
         {
             var eb = new EmbedBuilder();
-            var randomizeColor = new Random().Next(Lists.colorsArray.Length);
             var serverOwner = Context.Guild.Owner;
             var members = Context.Guild.MemberCount;
             var region = Context.Guild.VoiceRegionId;
@@ -156,7 +153,7 @@ namespace Storm.Modules
             eb.WithFooter("Made by Tempest#0003");
             eb.WithThumbnailUrl(serverIcon);
             eb.WithCurrentTimestamp();
-            eb.WithColor(Lists.colorsArray[randomizeColor]);
+            eb.WithColor(Global.GetRandomColor());
             await Context.Channel.SendMessageAsync("", false, eb.Build());
         }
 
@@ -171,13 +168,12 @@ namespace Storm.Modules
             else
             {
                 var eb = new EmbedBuilder();
-                var randomizeColor = new Random().Next(Lists.colorsArray.Length);
 
                 eb.WithTitle("Bot Information");
                 eb.AddField("Guilds", Global.Client.Guilds.Count);
                 eb.AddField("Shard", Global.Client.ShardId);
                 eb.AddField("Latency", Global.Client.Latency);
-                eb.WithColor(Lists.colorsArray[randomizeColor]);
+                eb.WithColor(Global.GetRandomColor());
                 eb.WithThumbnailUrl("https://avatars1.githubusercontent.com/u/44721791?s=460&v=4");
                 await Context.Channel.SendMessageAsync("", false, eb.Build());
             }

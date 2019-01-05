@@ -71,8 +71,7 @@ namespace Storm.Modules
             eb.WithFooter($"Random person generated from randomuser.me");
             eb.WithThumbnailUrl(avatarURL);
             eb.WithCurrentTimestamp();
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
-            eb.WithColor(Lists.colorsArray[RandomizeColor]);
+            eb.WithColor(Global.GetRandomColor());
 
             await Context.Channel.SendMessageAsync("", false, eb.Build());
         }
@@ -110,8 +109,7 @@ namespace Storm.Modules
         public async Task RainbowEmbedAsync()
         {
             var eb = new EmbedBuilder();
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
-            eb.WithColor(Lists.colorsArray[RandomizeColor]);
+            eb.WithColor(Global.GetRandomColor());
             eb.WithDescription("This is an embed with a random colour!");
             await ReplyAsync("", false, eb.Build());
         }
@@ -125,9 +123,8 @@ namespace Storm.Modules
             var author = new EmbedAuthorBuilder()
             .WithName($"{user.Username}'s Avatar")
             .WithIconUrl(avatar);
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
             var eb = new EmbedBuilder()
-            .WithColor(Lists.colorsArray[RandomizeColor])
+            .WithColor(Global.GetRandomColor())
             .WithImageUrl(avatar)
             .WithAuthor(author);
             await ReplyAsync("", false, eb.Build());
@@ -142,9 +139,8 @@ namespace Storm.Modules
             var author = new EmbedAuthorBuilder()
                 .WithName($"{Context.User.Username}'s Avatar")
                 .WithIconUrl(avatar);
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
             var eb = new EmbedBuilder()
-                .WithColor(Lists.colorsArray[RandomizeColor])
+                .WithColor(Global.GetRandomColor())
                 .WithImageUrl(avatar)
                 .WithAuthor(author);
             await ReplyAsync("", false, eb.Build());
@@ -156,31 +152,30 @@ namespace Storm.Modules
         public async Task WhoIsUserAsync(SocketGuildUser user)
         {
             var avatar = user.GetAvatarUrl();
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
             var eb = new EmbedBuilder();
-            string guildJoinDate = String.Format("{0:d MMMM yyyy} at {0:hh}:{0:mm tt} GMT", user.JoinedAt);
-            string accountCreationDate = String.Format("{0:d MMMM yyyy} at {0:hh}:{0:mm tt} GMT", user.CreatedAt);
+            string guildJoinDate = string.Format("{0:d MMMM yyyy} at {0:hh}:{0:mm tt} GMT", user.JoinedAt);
+            string accountCreationDate = string.Format("{0:d MMMM yyyy} at {0:hh}:{0:mm tt} GMT", user.CreatedAt);
             var userRoles = user.Roles.Select(r => r.Name);
             eb.WithTitle($"Information About {user.Username}#{user.Discriminator}");
-            if (String.IsNullOrEmpty(user.Nickname))
+            if (string.IsNullOrEmpty(user.Nickname))
             {
                 eb.AddField("ID", user.Id);
                 eb.AddField("Roles", String.Join(", ", userRoles));
                 eb.AddField("Joined Server", guildJoinDate);
                 eb.AddField("Created Account", accountCreationDate);
                 eb.WithThumbnailUrl(avatar);
-                eb.WithColor(Lists.colorsArray[RandomizeColor]);
+                eb.WithColor(Global.GetRandomColor());
                 await ReplyAsync("", false, eb.Build());
             }
             else
             {
                 eb.AddField("Nickname", user.Nickname);
                 eb.AddField("ID", user.Id);
-                eb.AddField("Roles", String.Join(", ", userRoles));
+                eb.AddField("Roles", string.Join(", ", userRoles));
                 eb.AddField("Joined Server", guildJoinDate);
                 eb.AddField("Created Account", accountCreationDate);
                 eb.WithThumbnailUrl(avatar);
-                eb.WithColor(Lists.colorsArray[RandomizeColor]);
+                eb.WithColor(Global.GetRandomColor());
                 await ReplyAsync("", false, eb.Build());
             }
         }
@@ -192,20 +187,19 @@ namespace Storm.Modules
         {
             var user = Context.Guild.GetUser(Context.User.Id);
             var avatar = user.GetAvatarUrl();
-            var RandomizeColor = new Random().Next(Lists.colorsArray.Length);
             var eb = new EmbedBuilder();
-            string guildJoinDate = String.Format("{0:d MMMM yyyy} at {0:hh}:{0:mm tt} GMT", user.JoinedAt);
-            string accountCreationDate = String.Format("{0:d MMMM yyyy} at {0:hh}:{0:mm tt} GMT", user.CreatedAt);
+            string guildJoinDate = string.Format("{0:d MMMM yyyy} at {0:hh}:{0:mm tt} GMT", user.JoinedAt);
+            string accountCreationDate = string.Format("{0:d MMMM yyyy} at {0:hh}:{0:mm tt} GMT", user.CreatedAt);
             var userRoles = user.Roles.Select(r => r.Name);
             eb.WithTitle($"Information About {user.Username}#{user.Discriminator}");
-            if (String.IsNullOrEmpty(user.Nickname))
+            if (string.IsNullOrEmpty(user.Nickname))
             {
                 eb.AddField("ID", user.Id);
                 eb.AddField("Roles", String.Join(", ", userRoles));
                 eb.AddField("Joined Server", guildJoinDate);
                 eb.AddField("Created Account", accountCreationDate);
                 eb.WithThumbnailUrl(avatar);
-                eb.WithColor(Lists.colorsArray[RandomizeColor]);
+                eb.WithColor(Global.GetRandomColor());
                 await ReplyAsync("", false, eb.Build());
             }
             else
@@ -216,7 +210,7 @@ namespace Storm.Modules
                 eb.AddField("Joined Server", guildJoinDate);
                 eb.AddField("Created Account", accountCreationDate);
                 eb.WithThumbnailUrl(avatar);
-                eb.WithColor(Lists.colorsArray[RandomizeColor]);
+                eb.WithColor(Global.GetRandomColor());
                 await ReplyAsync("", false, eb.Build());
             }
         }
