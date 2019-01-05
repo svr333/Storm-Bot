@@ -156,7 +156,6 @@
     <Compile Include="Helpers\Economy\ICoinsTransfer.cs" />
     <Compile Include="Helpers\Economy\IDailyCoins.cs" />
     <Compile Include="Helpers\EmbedHelper.cs" />
-    <Compile Include="Helpers\HelpMessage.cs" />
     <Compile Include="Modules\EconomyAndLevellingCommands.cs" />
     <Compile Include="Modules\HelpCommand.cs" />
     <Compile Include="Modules\MathCommands.cs" />
@@ -168,7 +167,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Resources\config.json" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

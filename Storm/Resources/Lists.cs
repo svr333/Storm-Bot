@@ -9,7 +9,6 @@ namespace Storm.Resources
 {
     public static class Lists
     {
-        internal static readonly string ResourceFolder = "resources";
         public static readonly IList<string> SansQuote = new List<string>
         {
             "You're gonna have a bad time...",

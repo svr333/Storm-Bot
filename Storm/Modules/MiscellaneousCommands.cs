@@ -121,7 +121,7 @@ namespace Storm.Modules
         [Summary("Get a user's avatar.")]
         public async Task GetAvatarAsync(SocketUser user)
         {
-            var avatar = user.GetAvatarUrl();
+            var avatar = user.GetAvatarUrl() ?? Context.User.GetDefaultAvatarUrl();
             var author = new EmbedAuthorBuilder()
             .WithName($"{user.Username}'s Avatar")
             .WithIconUrl(avatar);
@@ -138,7 +138,7 @@ namespace Storm.Modules
         [Summary("Get a user's avatar.")]
         public async Task GetAvatarAsync()
         {
-            var avatar = Context.User.GetAvatarUrl();
+            var avatar = Context.User.GetAvatarUrl() ?? Context.User.GetDefaultAvatarUrl();
             var author = new EmbedAuthorBuilder()
                 .WithName($"{Context.User.Username}'s Avatar")
                 .WithIconUrl(avatar);

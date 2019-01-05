@@ -24,35 +24,7 @@ namespace Storm.Handlers
 
         private static async Task ReactionAdded(Cacheable<IUserMessage, ulong> cacheMessage, ISocketMessageChannel channel, SocketReaction reaction)
         {
-            var helpMessage = Global.HelpMessagesToTrack.FirstOrDefault();
-            if (reaction.MessageId == helpMessage.MessageId)
-            {
-                if (reaction.Emote.Name == "🔨")
-                {
-                    var msg = reaction.Message;
-                    await msg.Value.ModifyAsync(m => { m.Content = "Test."; });
-                }
 
-                if (reaction.Emote.Name == "💸")
-                {
-
-                }
-
-                if (reaction.Emote.Name == "📂")
-                {
-
-                }
-
-                if (reaction.Emote.Name == "📝")
-                {
-
-                }
-
-                if (reaction.Emote.Name == "⛔")
-                {
-
-                }
-            }
         }
 
         //var msg = message as SocketUserMessage;

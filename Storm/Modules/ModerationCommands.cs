@@ -101,7 +101,6 @@ namespace Storm.Modules
         [Summary("Softban a user from the server.")]
         public async Task SoftbanUser(IGuildUser user, [Remainder]string reason = "no reason provided")
         {
-            var targetId = user.Id;
             await user.GetOrCreateDMChannelAsync();
             var softbandmembed = new EmbedBuilder();
             softbandmembed.WithTitle($"{Config.bot.crossEmote}  Banned from {Context.Guild.Name}");
@@ -181,6 +180,19 @@ namespace Storm.Modules
                 eb.WithColor(Lists.colorsArray[randomizeColor]);
                 eb.WithThumbnailUrl("https://avatars1.githubusercontent.com/u/44721791?s=460&v=4");
                 await Context.Channel.SendMessageAsync("", false, eb.Build());
+            }
+        }
+
+        [Command("ping")]
+        public async Task PingAsync()
+        {
+            if (Context.User.Id != Config.bot.botOwnerId)
+            {
+                await ReplyAsync($"{Config.bot.crossEmote} You must be the bot owner to execute this command!");
+            }
+            else
+            {
+                await ReplyAsync($":ping_pong: Pong! **{Global.Client.Latency}ms.**");
             }
         }
     }

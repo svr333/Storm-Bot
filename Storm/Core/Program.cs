@@ -2,9 +2,11 @@
 using Discord.WebSocket;
 using Storm.Handlers;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
+using Storm.Resources;
 using EventHandler = Storm.Handlers.EventHandler;
 
 namespace Storm.Core
@@ -20,14 +22,15 @@ namespace Storm.Core
 
         public async Task StartAsync()
         {
-            if (String.IsNullOrEmpty(Config.bot.token)) return;
+            if (string.IsNullOrEmpty(Config.bot.token))
+            {
+                Console.WriteLine("The bot's token is missing!");
+                return;
+            }
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose
             });
-            _services = ConfigureServices();
-            _services.GetRequiredService<EventHandler>().InitDiscordEvents();
-            await _services.GetRequiredService<CommandHandler>().InitializeAsync(_client);
             _client.Log += Log;
             _client.Ready += InternalTimer.StartTimer;
             await _client.LoginAsync(TokenType.Bot, Config.bot.token);
@@ -38,19 +41,10 @@ namespace Storm.Core
             await Task.Delay(-1);
         }
 
+#pragma warning disable CS1998 
         private async Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.Message);
-        }
-
-        private IServiceProvider ConfigureServices()
-        {
-            return new ServiceCollection()
-                .AddSingleton(_client)
-                .AddSingleton<CommandService>()
-                .AddSingleton<CommandHandler>()
-                .AddSingleton<EventHandler>()
-                .BuildServiceProvider();
         }
     }
 }
