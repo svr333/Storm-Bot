@@ -26,7 +26,7 @@ namespace Storm.Core
                 LogLevel = LogSeverity.Verbose
             });
             _services = ConfigureServices();
-            _services.GetRequiredService<Handlers.EventHandler>().InitDiscordEvents();
+            _services.GetRequiredService<EventHandler>().InitDiscordEvents();
             await _services.GetRequiredService<CommandHandler>().InitializeAsync(_client);
             _client.Log += Log;
             _client.Ready += InternalTimer.StartTimer;

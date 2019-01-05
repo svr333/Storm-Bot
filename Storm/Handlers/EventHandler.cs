@@ -10,9 +10,9 @@ namespace Storm.Handlers
 {
     public class EventHandler
     {
-        private readonly DiscordShardedClient _client;
+        private readonly DiscordSocketClient _client;
 
-        public EventHandler(DiscordShardedClient client)
+        public EventHandler(DiscordSocketClient client)
         {
             _client = client;
         }
