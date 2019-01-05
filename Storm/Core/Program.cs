@@ -2,12 +2,11 @@
 using Discord.WebSocket;
 using Storm.Handlers;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Reflection;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using Storm.Resources;
-using EventHandler = Storm.Handlers.EventHandler;
 
 namespace Storm.Core
 {
@@ -24,27 +23,37 @@ namespace Storm.Core
         {
             if (string.IsNullOrEmpty(Config.bot.token))
             {
-                Console.WriteLine("The bot's token is missing!");
+                Global.WriteColoredLine("CRITICAL ERROR: There is no token configured!", ConsoleColor.Red);
                 return;
             }
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose
             });
+
             _client.Log += Log;
-            _client.Ready += InternalTimer.StartTimer;
+
             await _client.LoginAsync(TokenType.Bot, Config.bot.token);
             await _client.StartAsync();
-            Global.Client = _client;
+
             _handler = new CommandHandler();
             await _handler.InitializeAsync(_client);
             await Task.Delay(-1);
         }
 
-#pragma warning disable CS1998 
-        private async Task Log(LogMessage msg)
+        private IServiceProvider ConfigureServices()
         {
-            Console.WriteLine(msg.Message);
+            return new ServiceCollection()
+                .AddSingleton(_client)
+                .AddSingleton(_handler)
+                .AddSingleton<CommandService>()
+                .BuildServiceProvider();
+        }
+
+        private static Task Log(LogMessage msg)
+        {
+            Global.WriteColoredLine(msg.Message, ConsoleColor.Green);
+            return Task.CompletedTask;
         }
     }
 }
