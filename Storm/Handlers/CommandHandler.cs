@@ -26,7 +26,6 @@ namespace Storm.Handlers
 
 
         public async Task InitializeAsync(DiscordSocketClient client)
-        {
             var cmdConfig = new CommandServiceConfig
             {
                 DefaultRunMode = RunMode.Async,
