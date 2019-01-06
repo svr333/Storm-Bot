@@ -17,16 +17,22 @@ namespace Storm.Handlers
         private CommandService _cmdService;
         private IServiceProvider _serviceProvider;
 
+        public CommandHandler(DiscordSocketClient client, CommandService cmd, IServiceProvider serv)
+        {
+            _client = client;
+            _cmdService = cmd;
+            IServiceProvider = serv;
+        }
+        
+        
         public async Task InitializeAsync(DiscordSocketClient client)
         {
+            //you dont need client in here anymore
             var cmdConfig = new CommandServiceConfig
             {
                 DefaultRunMode = RunMode.Async,
                 LogLevel = LogSeverity.Info
             };
-
-            _client = client;
-            _cmdService = new CommandService();
             await _cmdService.AddModulesAsync(Assembly.GetEntryAssembly(), _serviceProvider);
             await _client.SetGameAsync(Lists.BotStatus.RandomElement());
             _client.MessageReceived += HandleCommandAsync;
