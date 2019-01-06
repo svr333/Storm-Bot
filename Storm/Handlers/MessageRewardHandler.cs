@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -13,15 +14,21 @@ namespace Storm.Handlers
     {
         private readonly CommandService _cmdService;
 
+        public MessageRewardHandler(CommandService cmd)
+        {
+            _cmdService = cmd;
+        }
+
         public async Task UserSentMessage(SocketMessage message)
         {
             var user = message.Author as SocketGuildUser;
             if (user != null && user.IsBot) return;
             var channel = message.Channel as SocketTextChannel;
             var msg = message.Content;
+            var commandCheckMsg = msg.Substring(1);
             int msgLength = msg.Length;
             var userAccount = UserAccounts.GetAccount(user);
-            var searchResult = _cmdService.Search(msg);
+            var searchResult = _cmdService.Search(commandCheckMsg);
             var sinceLastMessage = DateTime.UtcNow - userAccount.LastMessage;
 
             if (!searchResult.IsSuccess)

@@ -32,12 +32,11 @@ namespace Storm.Core
 
             _client.Log += Log;
 
-            await _client.LoginAsync(TokenType.Bot, Config.bot.token);
-            await _client.StartAsync();
-
             _services = ConfigureServices();
             _services.GetRequiredService<EventHandler>().InitDiscordEvents();
             await _services.GetRequiredService<CommandHandler>().InitializeAsync(_client);
+            await _client.LoginAsync(TokenType.Bot, Config.bot.token);
+            await _client.StartAsync();
             await Task.Delay(-1);
         }
 
