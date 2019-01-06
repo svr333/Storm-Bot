@@ -142,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\DataStorage.cs" />
-    <Compile Include="Accounts\IUserAccountProvider.cs" />
     <Compile Include="Accounts\UserAccount.cs" />
     <Compile Include="Accounts\UserAccounts.cs" />
     <Compile Include="Core\Config.cs" />
@@ -155,7 +154,6 @@
     <Compile Include="Helpers\AwaitUserInput.cs" />
     <Compile Include="Helpers\Economy\Daily.cs" />
     <Compile Include="Helpers\Economy\ICoinsTransfer.cs" />
-    <Compile Include="Helpers\Economy\IDailyCoins.cs" />
     <Compile Include="Helpers\EmbedHelper.cs" />
     <Compile Include="Modules\EconomyAndLevellingCommands.cs" />
     <Compile Include="Modules\HelpCommand.cs" />

@@ -1,21 +1,15 @@
 ﻿using Storm.Accounts;
 using Storm.Resources;
 using System;
+using Discord.WebSocket;
 
 namespace Storm.Helpers.Economy
 {
-    public class Daily : IDailyCoins
+    public class Daily
     {
-        private readonly IUserAccountProvider userAccountProvider;
-
-        public Daily(IUserAccountProvider userAccountProvider)
+        public static void GetDaily(SocketUser user)
         {
-            this.userAccountProvider = userAccountProvider;
-        }
-
-        public void GetDaily(ulong userId)
-        {
-            var account = userAccountProvider.GetById(userId);
+            var account = UserAccounts.GetAccount(user);
             var sinceLastDaily = DateTime.UtcNow - account.LastDaily;
 
             if (sinceLastDaily.TotalHours < 24)
@@ -28,7 +22,7 @@ namespace Storm.Helpers.Economy
             account.Coins += Lists.DailyCoinsGain;
             account.LastDaily = DateTime.UtcNow;
 
-            userAccountProvider.SaveByIds(userId);
+            UserAccounts.SaveAccounts();
         }
     }
 }

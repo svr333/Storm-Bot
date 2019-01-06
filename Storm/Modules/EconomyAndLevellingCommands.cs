@@ -2,6 +2,7 @@
 using Discord;
 using System;
 using System.Threading.Tasks;
+using System.Xml;
 using Discord.WebSocket;
 using Storm.Resources;
 using Storm.Accounts;
@@ -55,28 +56,27 @@ namespace Storm.Modules
             }
         }
 
-        //private readonly IDailyCoins dailyCoins;
-
-        //public EconomyAndLevellingCommands(IDailyCoins dailyCoins, ICoinsTransfer coinsTransfer)
-        //{
-        //    this.dailyCoins = dailyCoins;
-        //    this.coinsTransfer = coinsTransfer;
-        //}
-
-        //[Command("daily")]
-        //[Summary("Recieve a small amount of coins each day.")]
-        //public async Task GetDailyAsync()
-        //{
-        //    try
-        //    {
-        //        dailyCoins.GetDaily(Context.User.Id);
-        //        await ReplyAsync($"Here's {Lists.DailyCoinsGain} miunies, {Context.User.Mention}! Just for you...");
-        //    }
-        //    catch (InvalidOperationException e)
-        //    {
-        //        var timeSpanString = string.Format("{0:%h} hours {0:%m} minutes {0:%s} seconds", new TimeSpan(24, 0, 0).Subtract((TimeSpan)e.Data["sinceLastDaily"]));
-        //        await ReplyAsync($"You've already collected your daily for today, {Context.User.Mention}!.\nCome back in {timeSpanString}.");
-        //    }
-        //}
+        [Command("daily")]
+        [Summary("Recieve a small amount of coins each day.")]
+        public async Task GetDailyAsync()
+        {
+            try
+            {
+                Daily.GetDaily(Context.User);
+                var eb = new EmbedBuilder()
+                    .WithDescription(
+                        $"{Config.bot.coinEmote} {Lists.DailyCoinsGain} coins have been added to your account. You must wait a day before using this command again.")
+                    .WithColor(Global.GetRandomColor());
+                await ReplyAsync(embed:eb.Build());
+            }
+            catch (InvalidOperationException e)
+            {
+                var timeSpanString = string.Format("{0:%h} hours {0:%m} minutes {0:%s} seconds", new TimeSpan(24, 0, 0).Subtract((TimeSpan)e.Data["sinceLastDaily"]));
+                var eb = new EmbedBuilder()
+                    .WithDescription($"You've already collected your daily for today. Come back in {timeSpanString}.")
+                    .WithColor(Global.GetRandomColor());
+                await ReplyAsync(embed: eb.Build());
+            }
+        }
     }
 }
