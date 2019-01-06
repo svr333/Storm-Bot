@@ -13,9 +13,9 @@ namespace Storm.Handlers
 {
     internal class CommandHandler
     {
-        private DiscordSocketClient _client;
-        private CommandService _cmdService;
-        private IServiceProvider _serviceProvider;
+        private readonly DiscordSocketClient _client;
+        private readonly CommandService _cmdService;
+        private readonly IServiceProvider _serviceProvider;
 
         public CommandHandler(DiscordSocketClient client, CommandService cmd, IServiceProvider serv)
         {
