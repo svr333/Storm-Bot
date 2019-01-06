@@ -8,6 +8,7 @@ using Storm.Resources;
 using Storm.Accounts;
 using Storm.Core;
 using Storm.Helpers.Economy;
+using Storm.Preconditions;
 
 namespace Storm.Modules
 {
@@ -74,6 +75,31 @@ namespace Storm.Modules
                 var timeSpanString = string.Format("{0:%h} hours {0:%m} minutes {0:%s} seconds", new TimeSpan(24, 0, 0).Subtract((TimeSpan)e.Data["sinceLastDaily"]));
                 var eb = new EmbedBuilder()
                     .WithDescription($"You've already collected your daily for today. Come back in {timeSpanString}.")
+                    .WithColor(Global.GetRandomColor());
+                await ReplyAsync(embed: eb.Build());
+            }
+        }
+
+        [Command("transfer")]
+        [Alias("pay")]
+        [Summary("Transfer an amount of coins to another user.")]
+        public async Task TransferCoinsAsync(SocketUser user, uint amount)
+        {
+
+            try
+            {
+                Transfer.TransferCoins(Context.User, user, amount);
+                var eb = new EmbedBuilder()
+                    .WithDescription(
+                        $"{Context.User.Mention} transferred {Config.bot.coinEmote} {amount} coins to {user.Mention}")
+                    .WithColor(Global.GetRandomColor());
+                await ReplyAsync(embed: eb.Build());
+            }
+            catch (InvalidOperationException)
+            {
+                var eb = new EmbedBuilder()
+                    .WithDescription(
+                        "**Uh oh, something went wrong! Remember:**\n  - You *cannot* transfer coins to yourself.\n- You *cannot* transfer coins to a bot.\n- You *must* have sufficient funds to transfer.")
                     .WithColor(Global.GetRandomColor());
                 await ReplyAsync(embed: eb.Build());
             }

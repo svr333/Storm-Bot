@@ -153,7 +153,7 @@
     <Compile Include="Handlers\MessageRewardHandler.cs" />
     <Compile Include="Helpers\AwaitUserInput.cs" />
     <Compile Include="Helpers\Economy\Daily.cs" />
-    <Compile Include="Helpers\Economy\ICoinsTransfer.cs" />
+    <Compile Include="Helpers\Economy\Transfer.cs" />
     <Compile Include="Helpers\EmbedHelper.cs" />
     <Compile Include="Modules\EconomyAndLevellingCommands.cs" />
     <Compile Include="Modules\HelpCommand.cs" />

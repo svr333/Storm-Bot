@@ -82,7 +82,7 @@ namespace Storm.Resources
         public static readonly string ExDailyTooSoon = "You've already collected your daily for today.";
         public static readonly string ExTransferSameUser = "Cannot transfer coins to the same user.";
         public static readonly string ExTransferToBot = "You cannot transfer coins to a bot.";
-        public static readonly string ExTransferNotEnoughFunds = "You do not have enough coins tro transfer.";
+        public static readonly string ExTransferNotEnoughFunds = "You do not have enough coins to transfer.";
     }
     public static class ChooseRandom
     {
