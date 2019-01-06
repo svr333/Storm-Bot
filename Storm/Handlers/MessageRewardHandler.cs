@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Discord.Commands;
 using Discord.WebSocket;
 using Storm.Accounts;
 using Storm.Resources;
@@ -13,6 +11,8 @@ namespace Storm.Handlers
 #pragma warning disable CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
     public class MessageRewardHandler
     {
+        private readonly CommandService _cmdService;
+
         public async Task UserSentMessage(SocketMessage message)
         {
             var user = message.Author as SocketGuildUser;
@@ -21,15 +21,23 @@ namespace Storm.Handlers
             var msg = message.Content;
             int msgLength = msg.Length;
             var userAccount = UserAccounts.GetAccount(user);
+            var searchResult = _cmdService.Search(msg);
+            var sinceLastMessage = DateTime.UtcNow - userAccount.LastMessage;
 
-            if (channel != null)
+            if (!searchResult.IsSuccess)
             {
-                if (msgLength > Lists.MessageRewardMinLength)
+                if (channel != null)
                 {
-                    userAccount.XP += Lists.XpPerMessageGain;
-                }
+                    if (sinceLastMessage.TotalSeconds > 5)
+                    {
+                        if (msgLength > Lists.MessageRewardMinLength)
+                        {
+                            userAccount.XP += Lists.XpPerMessageGain;
+                        }
 
-                UserAccounts.SaveAccounts();
+                        UserAccounts.SaveAccounts();
+                    }
+                }
             }
         }
 
