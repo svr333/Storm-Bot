@@ -52,5 +52,7 @@ namespace Storm.Handlers
         {
             UserSentMessage(message);
         }
+
+        //Huge thanks to mylorik (https://github.com/mylorik) for helping get this working.
     }
 }

@@ -13,9 +13,17 @@ namespace Storm.Handlers
 {
     internal class CommandHandler
     {
-        private DiscordSocketClient _client;
-        private CommandService _cmdService;
-        private IServiceProvider _serviceProvider;
+        private readonly DiscordSocketClient _client;
+        private readonly CommandService _cmdService;
+        private readonly IServiceProvider _serviceProvider;
+
+        public CommandHandler(DiscordSocketClient client, CommandService cmd, IServiceProvider serv)
+        {
+            _client = client;
+            _cmdService = cmd;
+            _serviceProvider = serv;
+        }
+
 
         public async Task InitializeAsync(DiscordSocketClient client)
         {
@@ -24,9 +32,6 @@ namespace Storm.Handlers
                 DefaultRunMode = RunMode.Async,
                 LogLevel = LogSeverity.Info
             };
-
-            _client = client;
-            _cmdService = new CommandService();
             await _cmdService.AddModulesAsync(Assembly.GetEntryAssembly(), _serviceProvider);
             await _client.SetGameAsync(Lists.BotStatus.RandomElement());
             _client.MessageReceived += HandleCommandAsync;
@@ -52,6 +57,7 @@ namespace Storm.Handlers
                     var commandInfo = searchResult.Commands.FirstOrDefault().Command;
                     var commandInfoEmbed = EmbedHelper.CreateEmbed(commandInfo);
                     await context.Channel.SendMessageAsync("", false, commandInfoEmbed);
+                    //Huge thanks to Charly6596 (https://github.com/Charly6596) for helping with this!
                 }
             }
         }

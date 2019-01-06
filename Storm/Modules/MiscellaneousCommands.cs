@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Net;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using Discord.WebSocket;
+using OpenWeatherMap.Standard;
 using Storm.Core;
 using Storm.Resources;
 
@@ -80,38 +80,35 @@ namespace Storm.Modules
         [Summary("View weather information for a specified area.")]
         public async Task GetWeatherAsync(string city, string country)
         {
-            string location = $"{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(city)},{country.ToLower()}";
-            string json = "";
-            using (WebClient client = new WebClient())
-            {
-                json = client.DownloadString($"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={Config.bot.weatherApiKey}");
-            }
-
-            var data = JsonConvert.DeserializeObject<dynamic>(json);
-            File.WriteAllText("Resources/debugData.json", json);
-
-            string cityName = data[0].name.ToString();
-            string countryTag = data.sys[0].country.ToString();
-            string cityId = data.id[0].ToString();
-            string weather = data.weather[0].main.ToString();
-            string temp = data.main[0].temp.ToString();
-            string tempMax = data.main[0].temp_max.ToString();
-            string tempMin = data.main[0].temp_min.ToString();
-            string humidity = data.main[0].humidity.ToString();
-            string wind = data.wind[0].speed.ToString();
-            string icon = data.weather[0].icon.ToString();
+            string cityName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(city);
+            string countryCode = country.ToLower();
+            string apiKey = Config.bot.weatherApiKey;
+            Forecast forecast = new Forecast();
+            WeatherData data = await forecast.GetWeatherDataByCityNameAsync(apiKey, cityName, countryCode, WeatherUnits.metric);
+            string name = data.name;
+            string tag = data.sys.country;
+            int id = data.id;
+            string weather = data.weather[0].main;
+            string icon = data.weather[0].icon;
+            float temperature = data.main.temp;
+            float temperatureMin = data.main.temp_min;
+            float temperatureMax = data.main.temp_max;
+            int humidity = data.main.humidity;
+            float windSpeed = data.wind.speed;
 
             var footer = new EmbedFooterBuilder()
                 .WithIconUrl(Context.User.GetAvatarUrl() ?? Context.User.GetDefaultAvatarUrl())
-                .WithText($"Requested by {Context.User.Username}#{Context.User.Discriminator} | City ID: {cityId}");
-            var nl = Environment.NewLine;
+                .WithText($"Requested by {Context.User.Username}#{Context.User.Discriminator} | City ID: {id}");
             var eb = new EmbedBuilder()
-                .WithTitle($"Weather Information for {cityName}, {countryTag}")
-                .WithDescription(
-                    $"**Current Temperature:** `{temp}`{nl}**Weather:** `{weather}`{nl}**Min-Max Temperature:** `{tempMin}-{tempMax}`{nl}**Wind Speed:** `{wind}`{nl}**Humidity:** `{humidity}`")
+                .WithTitle($"Weather Data for {name}, {tag}.")
+                .AddField("Summary", weather)
+                .AddField("Temperature", $"{temperature} ({temperatureMin}min, {temperatureMax}max)")
+                .AddField("Wind Speed", windSpeed)
+                .AddField("Humidity", humidity)
+                .WithThumbnailUrl($"http://openweathermap.org/img/w/{icon}.png")
                 .WithFooter(footer)
-                .WithColor(Global.GetRandomColor())
-                .WithThumbnailUrl($"http://openweathermap.org/img/w/{icon}.png");
+                .WithCurrentTimestamp()
+                .WithColor(Global.GetRandomColor());
             await ReplyAsync(embed:eb.Build());
         }
 
