@@ -152,6 +152,7 @@
     <Compile Include="Handlers\CommandHandler.cs" />
     <Compile Include="Handlers\EventHandler.cs" />
     <Compile Include="Handlers\MessageRewardHandler.cs" />
+    <Compile Include="Helpers\AwaitUserInput.cs" />
     <Compile Include="Helpers\Economy\Daily.cs" />
     <Compile Include="Helpers\Economy\ICoinsTransfer.cs" />
     <Compile Include="Helpers\Economy\IDailyCoins.cs" />
@@ -161,6 +162,9 @@
     <Compile Include="Modules\MathCommands.cs" />
     <Compile Include="Modules\MiscellaneousCommands.cs" />
     <Compile Include="Modules\ModerationCommands.cs" />
+    <Compile Include="Preconditions\Cooldown.cs" />
+    <Compile Include="Preconditions\NoSelf.cs" />
+    <Compile Include="Preconditions\RequireBotHierarchy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Lists.cs" />
   </ItemGroup>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using Storm.Accounts;
 using Storm.Core;
+using Storm.Preconditions;
 using Storm.Resources;
 
 namespace Storm.Modules
@@ -17,7 +18,7 @@ namespace Storm.Modules
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.KickMembers)]
         [Summary("Kick a user from the server.")]
-        public async Task KickUser(IGuildUser user, [Remainder]string reason = "no reason provided")
+        public async Task KickUser([NoSelf][RequireBotHierarchy]IGuildUser user, [Remainder]string reason = "no reason provided")
         {
             await user.GetOrCreateDMChannelAsync();
             var kickdmembed = new EmbedBuilder();
@@ -35,7 +36,7 @@ namespace Storm.Modules
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
         [Summary("Ban a user from the server.")]
-        public async Task BanUser(IGuildUser user, [Remainder]string reason = "no reason provided")
+        public async Task BanUser([NoSelf][RequireBotHierarchy]IGuildUser user, [Remainder]string reason = "no reason provided")
         {
             await user.GetOrCreateDMChannelAsync();
             var bandmembed = new EmbedBuilder();
@@ -52,7 +53,7 @@ namespace Storm.Modules
         [Command("warn")]
         [Summary("Warns a user.")]
         [RequireUserPermission(GuildPermission.KickMembers)]
-        public async Task WarnUser(IGuildUser user, [Remainder]string reason = "no reason provided")
+        public async Task WarnUser([NoSelf]IGuildUser user, [Remainder]string reason = "no reason provided")
         {
             var userAccount = UserAccounts.GetAccount((SocketUser)user);
             userAccount.NumberOfWarnings++;
@@ -87,7 +88,7 @@ namespace Storm.Modules
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
         [Summary("Unban a user from the server.")]
-        public async Task UnbanUser(ulong userId)
+        public async Task UnbanUser([NoSelf]ulong userId)
         {
             await Context.Guild.RemoveBanAsync(userId);
             await Context.Channel.SendMessageAsync($"**{Config.bot.checkEmote} User was unbanned**.");
@@ -97,7 +98,7 @@ namespace Storm.Modules
         [RequireUserPermission(GuildPermission.BanMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
         [Summary("Softban a user from the server.")]
-        public async Task SoftbanUser(IGuildUser user, [Remainder]string reason = "no reason provided")
+        public async Task SoftbanUser([NoSelf][RequireBotHierarchy]IGuildUser user, [Remainder]string reason = "no reason provided")
         {
             await user.GetOrCreateDMChannelAsync();
             var softbandmembed = new EmbedBuilder();
@@ -117,9 +118,9 @@ namespace Storm.Modules
         [Summary("Mass delete messages in a channel.")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
-        public async Task PurgeMessages(int messagesToDelete)
+        public async Task PurgeMessages(int messagesToDelete = 100)
         {
-            if (messagesToDelete > 100)
+            if (messagesToDelete >= 101)
             {
                await ReplyAsync($"{Config.bot.crossEmote} Sorry, you cannot purge more than 100 messages at a time.");
             }
@@ -132,6 +133,29 @@ namespace Storm.Modules
                 var purgeMessageDelay = await ReplyAsync($"{Config.bot.checkEmote} Purge completed. ***This message will be deleted in {delay / 1000} seconds.***");
                 await Task.Delay(delay);
                await purgeMessageDelay.DeleteAsync();
+            }
+        }
+
+        [Command("purgeuser")]
+        [Alias("pruneuser", "clearuser")]
+        [Summary("Mass delete messages from a specified user in a channel.")]
+        [RequireUserPermission(GuildPermission.ManageMessages)]
+        [RequireBotPermission(GuildPermission.ManageMessages)]
+        public async Task PurgeUserMessages(IGuildUser user, int messagesToDelete = 100)
+        {
+            if (messagesToDelete >= 101)
+            {
+                await ReplyAsync($"{Config.bot.crossEmote} Sorry, you cannot purge more than 100 messages at a time.");
+            }
+            else
+            {
+                var messages = await Context.Message.Channel.GetMessagesAsync(messagesToDelete + 1).FlattenAsync();
+                var result = messages.Where(x => x.Author.Id == user.Id && x.CreatedAt >= DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(14)));
+                await (Context.Message.Channel as SocketTextChannel).DeleteMessagesAsync(result);
+                const int delay = 2000;
+                var purgeMessageDelay = await ReplyAsync($"{Config.bot.checkEmote} Purge completed. ***This message will be deleted in {delay / 1000} seconds.***");
+                await Task.Delay(delay);
+                await purgeMessageDelay.DeleteAsync();
             }
         }
 
